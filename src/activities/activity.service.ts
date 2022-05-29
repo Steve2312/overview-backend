@@ -28,11 +28,19 @@ export class ActivityService {
   }
 
   async getDates() {
-    const query =
-      'SELECT date, count(*) FROM activity GROUP BY date ORDER BY date ASC';
+    const query = `
+        SELECT date,
+        COUNT(*) "total",
+        COUNT(finished) FILTER (where finished = false) "remaining"
+        FROM activity
+        GROUP BY date
+        ORDER BY date ASC;
+    `;
     const dates = await this.activityRepository.query(query);
     return dates.map((data) => {
       data.date = data.date.split('T')[0];
+      data.total = parseInt(data.total);
+      data.remaining = parseInt(data.remaining);
       return data;
     });
   }
