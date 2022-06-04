@@ -22,9 +22,13 @@ export class ActivityService {
 
   async findByDate(date: string) {
     const activities = await this.findAll();
-    return activities.filter((activity) => {
-      return activity.date == date;
-    });
+    return activities
+      .filter((activity) => {
+        return activity.date == date;
+      })
+      .sort((a, b) => {
+        return a.name.localeCompare(b.name);
+      });
   }
 
   async getDates() {
@@ -46,6 +50,7 @@ export class ActivityService {
   }
 
   async update(id: number, activity: Activity) {
+    activity.id = id;
     await this.activityRepository.update(id, activity);
     return await this.findById(id);
   }

@@ -16,7 +16,7 @@ export class Activity {
   @Column({
     nullable: true,
   })
-  googleMapsId: string;
+  googleMapsUrl: string;
 
   @Column({
     transformer: {
