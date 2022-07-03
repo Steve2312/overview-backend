@@ -24,6 +24,12 @@ export class Activity {
   googleMapsUrl: string;
 
   @Column({
+    type: 'bigint',
+    default: Date.now(),
+  })
+  lastEdited: number;
+
+  @Column({
     transformer: {
       from(value: string): string {
         const date = new Date(value);

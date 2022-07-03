@@ -11,7 +11,13 @@ export class ActivityService {
   ) {}
 
   async findAll() {
-    return await this.activityRepository.find();
+    return await this.activityRepository.find({
+      order: {
+        name: 'ASC',
+        date: 'ASC',
+        id: 'ASC',
+      },
+    });
   }
 
   async findById(id: number) {
@@ -51,11 +57,13 @@ export class ActivityService {
 
   async update(id: number, activity: Activity) {
     activity.id = id;
+    activity.lastEdited = Date.now();
     await this.activityRepository.update(id, activity);
     return await this.findById(id);
   }
 
   async add(activity: Activity) {
+    activity.lastEdited = Date.now();
     const { identifiers } = await this.activityRepository.insert(activity);
     return await this.findById(identifiers[0].id);
   }
